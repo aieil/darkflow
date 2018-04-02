@@ -1,6 +1,7 @@
 from .defaults import argHandler #Import the default arguments
 import os
 from .net.build import TFNet
+import time
 
 def cliHandler(args):
     FLAGS = argHandler()
@@ -23,19 +24,25 @@ def cliHandler(args):
     try: FLAGS.load = int(FLAGS.load)
     except: pass
 
+    print("stage1")
+
     tfnet = TFNet(FLAGS)
     
-    if FLAGS.demo:
-        tfnet.camera()
-        exit('Demo stopped, exit.')
+    print("stage2")
 
-    if FLAGS.train:
-        print('Enter training ...'); tfnet.train()
-        if not FLAGS.savepb: 
-            exit('Training finished, exit.')
+    while True:
+        if FLAGS.demo:
+            tfnet.camera()
+            exit('Demo stopped, exit.')
 
-    if FLAGS.savepb:
-        print('Rebuild a constant version ...')
-        tfnet.savepb(); exit('Done')
+        if FLAGS.train:
+            print('Enter training ...'); tfnet.train()
+            if not FLAGS.savepb: 
+                 exit('Training finished, exit.')
 
-    tfnet.predict()
+        if FLAGS.savepb:
+            print('Rebuild a constant version ...')
+            tfnet.savepb(); exit('Done')
+
+        tfnet.predict()
+        time.sleep(0.05)
